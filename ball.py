@@ -6,6 +6,7 @@ WHITE = (255, 255, 255)
 
 class Ball:
 
+    BALL_RADIUS = 10
     def __init__(self, x, y, ball_radius):
         self.x = self.original_x = x
         self.y = self.original_y = y

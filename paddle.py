@@ -2,7 +2,11 @@ import pygame
 RED = (255, 0, 0)
 
 
+
 class Paddle:
+
+    PADDLE_WIDTH, PADDLE_HEIGHT = 20, 100
+    PADDLE_VELOCITY = 5
 
     def __init__(self, x, y, width, height):
         self.x = self.original_x = x
