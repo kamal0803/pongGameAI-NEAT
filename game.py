@@ -6,6 +6,13 @@ import pygame
 
 pygame.init()
 
+class GameInformation:
+    def __init__(self, left_hits, right_hits, left_score, right_score):
+        self.left_hits = left_hits
+        self.right_hits = right_hits
+        self.left_score = left_score
+        self.right_score = right_score
+
 class Game:
 
     WINNING_SCORE = 5
@@ -24,7 +31,8 @@ class Game:
               Partitions(self.window_width/2, Partitions.PARTITION_WIDTH + 6*Partitions.PARTITION_DISTANCE, Partitions.PARTITION_WIDTH, Partitions.PARTITION_HEIGHT)]
 
         self.ball = Ball(self.window_width / 2, random.randint(100, 300), Ball.BALL_RADIUS)
-
+        self.left_hits = 0
+        self.right_hits = 0
         self.left_score = 0
         self.right_score = 0
         self.window = window
@@ -45,25 +53,24 @@ class Game:
 
         return ball_d
 
-    def move_paddle(self):
+    def move_paddle(self, left=True, up=True):
 
-        keys = pygame.key.get_pressed()
+        if left:
+            if up:
+                self.l_paddle.move_up(Paddle.PADDLE_VELOCITY)
+            else:
 
-        if keys[pygame.K_UP]:
-            self.r_paddle.move_up(Paddle.PADDLE_VELOCITY)
-        if keys[pygame.K_DOWN]:
-            self.r_paddle.move_down(Paddle.PADDLE_VELOCITY)
+                self.l_paddle.move_down(Paddle.PADDLE_VELOCITY)
+        else:
+            if up:
+                self.r_paddle.move_up(Paddle.PADDLE_VELOCITY)
+            else:
+                self.r_paddle.move_down(Paddle.PADDLE_VELOCITY)
 
-        if keys[pygame.K_w]:
-            self.l_paddle.move_up(Paddle.PADDLE_VELOCITY)
-        if keys[pygame.K_s]:
-            self.l_paddle.move_down(Paddle.PADDLE_VELOCITY)
-
-        self.r_paddle.within_lower_bound()
-        self.r_paddle.within_upper_bound()
-
-        self.l_paddle.within_lower_bound()
         self.l_paddle.within_upper_bound()
+        self.l_paddle.within_lower_bound()
+        self.r_paddle.within_upper_bound()
+        self.r_paddle.within_lower_bound()
 
     def detect_collision(self, ball_d):
 
@@ -71,6 +78,7 @@ class Game:
             self.ball.ball_velocity_y *= -1
 
         if self.r_paddle.paddle.colliderect(ball_d):
+            self.right_hits = self.right_hits + 1
             self.ball.ball_velocity_x *= -1
             diff = self.r_paddle.height // 2 - (ball_d.clip(self.r_paddle.paddle).y - self.r_paddle.y)
             reduction_factor = (self.r_paddle.height / 2) / self.ball.ball_velocity_x
@@ -78,6 +86,7 @@ class Game:
             self.ball.ball_velocity_y = (-1) * y_vel
 
         if self.l_paddle.paddle.colliderect(ball_d):
+            self.left_hits = self.left_hits + 1
             self.ball.ball_velocity_x *= -1
             diff = self.l_paddle.height // 2 - (ball_d.clip(self.l_paddle.paddle).y - self.l_paddle.y)
             reduction_factor = (self.l_paddle.height / 2) / self.ball.ball_velocity_x
@@ -134,7 +143,10 @@ class Game:
     def loop(self):
         self.ball.move()
         self.detect_ball_miss()
-        self.check_if_winning_score()
+        #self.check_if_winning_score()
+
+        game_info = GameInformation(self.left_hits, self.right_hits, self.left_score, self.right_score)
+        return game_info
 
 
 
