@@ -1,3 +1,3 @@
 # pongGameAI-NEAT
 
-Built an AI which teaches itself how to play the game of pong in Python using the pygame module. Each AI was trained with each other based on various paramaters of the NEAT (Neuro Evolution of Augmenting Topologies) algorithm. Post training, it was tested against a human player which gave excellent results.
+Built an AI that teaches itself how to play the game of Pong in Python using the Pygame module. The AI utilized reinforcement learning principles, with training conducted between agents using various parameters of the NEAT (NeuroEvolution of Augmenting Topologies) algorithm. Post-training, the AI was tested against a human player and demonstrated excellent results.
